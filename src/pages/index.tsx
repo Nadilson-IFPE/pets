@@ -3,6 +3,14 @@ import Head from "next/head";
 import Image from "next/image";
 import Lista from "../ui/components/Lista/Lista";
 import Titulo from "../ui/components/Titulo/Titulo";
+import {
+  Dialog,
+  TextField,
+  Grid,
+  DialogActions,
+  Button,
+  Snackbar,
+} from "@mui/material";
 
 const Home: NextPage = () => {
   return (
@@ -56,6 +64,24 @@ const Home: NextPage = () => {
           },
         ]}
       />
+
+      <Dialog open={true} fullWidth PaperProps={{ sx: { p: 5 } }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField label={"E-mail"} type={"email"} fullWidth />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField label={"Quantia por mês"} type={"number"} fullWidth />
+          </Grid>
+        </Grid>
+        <DialogActions sx={{ mt: 5 }}>
+          <Button color={"secondary"}>Cancelar</Button>
+          <Button variant={"contained"}>Confirmar adoção</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Snackbar open={false} message={"Mensagem de teste!"} />
     </div>
   );
 };
