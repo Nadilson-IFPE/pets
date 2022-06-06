@@ -11,8 +11,21 @@ import {
   Button,
   Snackbar,
 } from "@mui/material";
+import { useIndex } from "./../data/hooks/pages/useIndex";
 
 const Home: NextPage = () => {
+  const {
+    listaPets,
+    petSelecionado,
+    setPetSelecionado,
+    email,
+    setEmail,
+    valor,
+    setValor,
+    mensagem,
+    setMensagem,
+  } = useIndex();
+
   return (
     <div>
       <Titulo
@@ -25,63 +38,49 @@ const Home: NextPage = () => {
         }
       />
 
-      <Lista
-        pets={[
-          {
-            id: 1,
-            nome: "Zeus",
-            historia:
-              "Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero sint laborum, facilis nobis officia delectus molestiae, molestias voluptate illum voluptatibus voluptatem vitae dolorem debitis repellat animi, quidem sapiente quod veritatis?",
-            foto: "/imagens/zeus.jpg",
-          },
-          {
-            id: 2,
-            nome: "Luma",
-            historia:
-              "Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero sint laborum, facilis nobis officia delectus molestiae, molestias voluptate illum voluptatibus voluptatem vitae dolorem debitis repellat animi, quidem sapiente quod veritatis?",
-            foto: "/imagens/luma.jpg",
-          },
-          {
-            id: 3,
-            nome: "Boo",
-            historia:
-              "Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero sint laborum, facilis nobis officia delectus molestiae, molestias voluptate illum voluptatibus voluptatem vitae dolorem debitis repellat animi, quidem sapiente quod veritatis?",
-            foto: "/imagens/boo.jpg",
-          },
-          {
-            id: 4,
-            nome: "Rex",
-            historia:
-              "Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero sint laborum, facilis nobis officia delectus molestiae, molestias voluptate illum voluptatibus voluptatem vitae dolorem debitis repellat animi, quidem sapiente quod veritatis?",
-            foto: "https://veja.abril.com.br/wp-content/uploads/2017/01/cao-labrador-3-copy.jpg",
-          },
-          {
-            id: 5,
-            nome: "Max",
-            historia:
-              "Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero sint laborum, facilis nobis officia delectus molestiae, molestias voluptate illum voluptatibus voluptatem vitae dolorem debitis repellat animi, quidem sapiente quod veritatis?",
-            foto: "https://love.doghero.com.br/wp-content/uploads/2018/12/golden-retriever-1.png",
-          },
-        ]}
-      />
+      <Lista pets={listaPets} onSelect={(pet) => setPetSelecionado(pet)} />
 
-      <Dialog open={true} fullWidth PaperProps={{ sx: { p: 5 } }}>
+      <Dialog
+        open={petSelecionado !== null}
+        fullWidth
+        PaperProps={{ sx: { p: 5 } }}
+        onClose={() => setPetSelecionado(null)}
+      >
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <TextField label={"E-mail"} type={"email"} fullWidth />
+            <TextField
+              label={"E-mail"}
+              type={"email"}
+              fullWidth
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </Grid>
 
           <Grid item xs={12}>
-            <TextField label={"Quantia por mês"} type={"number"} fullWidth />
+            <TextField
+              label={"Quantia por mês"}
+              type={"number"}
+              fullWidth
+              value={valor}
+              onChange={(e) => setValor(e.target.value)}
+            />
           </Grid>
         </Grid>
         <DialogActions sx={{ mt: 5 }}>
-          <Button color={"secondary"}>Cancelar</Button>
+          <Button color={"secondary"} onClick={() => setPetSelecionado(null)}>
+            Cancelar
+          </Button>
           <Button variant={"contained"}>Confirmar adoção</Button>
         </DialogActions>
       </Dialog>
 
-      <Snackbar open={false} message={"Mensagem de teste!"} />
+      <Snackbar
+        open={mensagem.length > 0}
+        message={mensagem}
+        autoHideDuration={2500}
+        onClose={() => setMensagem("")}
+      />
     </div>
   );
 };
