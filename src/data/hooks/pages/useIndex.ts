@@ -1,48 +1,57 @@
-import { useState } from "react";
+import { AxiosError } from "axios";
+import { useEffect, useState } from "react";
 import { Pet } from "../../@types/Pet";
+import { ApiService } from "./../../services/ApiService";
 
 export function useIndex() {
-  const [listaPets, setListaPets] = useState([
-      {
-        id: 1,
-        nome: "Zeus",
-        historia:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero sint laborum, facilis nobis officia delectus molestiae, molestias voluptate illum voluptatibus voluptatem vitae dolorem debitis repellat animi, quidem sapiente quod veritatis?",
-        foto: "/imagens/zeus.jpg",
-      },
-      {
-        id: 2,
-        nome: "Luma",
-        historia:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero sint laborum, facilis nobis officia delectus molestiae, molestias voluptate illum voluptatibus voluptatem vitae dolorem debitis repellat animi, quidem sapiente quod veritatis?",
-        foto: "/imagens/luma.jpg",
-      },
-      {
-        id: 3,
-        nome: "Boo",
-        historia:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero sint laborum, facilis nobis officia delectus molestiae, molestias voluptate illum voluptatibus voluptatem vitae dolorem debitis repellat animi, quidem sapiente quod veritatis?",
-        foto: "/imagens/boo.jpg",
-      },
-      {
-        id: 4,
-        nome: "Rex",
-        historia:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero sint laborum, facilis nobis officia delectus molestiae, molestias voluptate illum voluptatibus voluptatem vitae dolorem debitis repellat animi, quidem sapiente quod veritatis?",
-        foto: "https://veja.abril.com.br/wp-content/uploads/2017/01/cao-labrador-3-copy.jpg",
-      },
-      {
-        id: 5,
-        nome: "Max",
-        historia:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero sint laborum, facilis nobis officia delectus molestiae, molestias voluptate illum voluptatibus voluptatem vitae dolorem debitis repellat animi, quidem sapiente quod veritatis?",
-        foto: "https://love.doghero.com.br/wp-content/uploads/2018/12/golden-retriever-1.png",
-      },
-    ]),
+  const [listaPets, setListaPets] = useState<Pet[]>([]),
     [petSelecionado, setPetSelecionado] = useState<Pet | null>(null),
     [email, setEmail] = useState(""),
     [valor, setValor] = useState(""),
     [mensagem, setMensagem] = useState("");
+
+  useEffect(() => {
+    ApiService.get("/pets").then((resposta) => {
+      setListaPets(resposta.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (petSelecionado === null) {
+      limparFormulario();
+    }
+  }, [petSelecionado]);
+
+  function adotar() {
+    if (petSelecionado !== null) {
+      if (validarDadosAdocao()) {
+        ApiService.post("/adocoes", {
+          pet_id: petSelecionado.id,
+          email,
+          valor,
+        })
+          .then(() => {
+            setPetSelecionado(null);
+            setMensagem("Pet adotado com sucesso!");
+            limparFormulario();
+          })
+          .catch((error: AxiosError) => {
+            setMensagem(error.response?.data.message);
+          });
+      } else {
+        setMensagem("Preencha todos os campos corretamente!");
+      }
+    }
+  }
+
+  function validarDadosAdocao() {
+    return email.length > 0 && valor.length > 9;
+  }
+
+  function limparFormulario() {
+    setEmail("");
+    setValor("");
+  }
 
   return {
     listaPets,
@@ -54,5 +63,6 @@ export function useIndex() {
     setValor,
     mensagem,
     setMensagem,
+    adotar,
   };
 }

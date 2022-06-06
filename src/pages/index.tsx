@@ -24,6 +24,7 @@ const Home: NextPage = () => {
     setValor,
     mensagem,
     setMensagem,
+    adotar,
   } = useIndex();
 
   return (
@@ -71,7 +72,9 @@ const Home: NextPage = () => {
           <Button color={"secondary"} onClick={() => setPetSelecionado(null)}>
             Cancelar
           </Button>
-          <Button variant={"contained"}>Confirmar adoção</Button>
+          <Button variant={"contained"} onClick={() => adotar()}>
+            Confirmar adoção
+          </Button>
         </DialogActions>
       </Dialog>
 
