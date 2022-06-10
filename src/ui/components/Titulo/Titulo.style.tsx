@@ -7,7 +7,7 @@ export const TituloStyled = styled("h1")`
 `;
 
 export const SubTitulo = styled("h2")`
-  font-size: 18;
+  font-size: 18px;
   text-align: center;
   margin-bottom: ${({ theme }) => theme.spacing(5)};
   font-weight: normal;
