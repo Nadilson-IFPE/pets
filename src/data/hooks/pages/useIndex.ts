@@ -45,7 +45,7 @@ export function useIndex() {
   }
 
   function validarDadosAdocao() {
-    return email.length > 0 && valor.length > 9;
+    return email.length > 0 && valor.length > 0;
   }
 
   function limparFormulario() {

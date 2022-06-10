@@ -11,7 +11,9 @@ export default function CabecalhoAdmin() {
   return (
     <CabecalhoContainer>
       <div>
-        <Logo src={"/imagens/logo.svg"} alt={"Adote um pet."} />
+        <NextLink href={"/"} passHref={true}>
+          <Logo src={"/imagens/logo.svg"} alt={"Adote um pet."} />
+        </NextLink>
         <LinksContainer>
           <Link component={NextLink} href="/pets/cadastro">
             <a>Cadastrar Pet</a>
